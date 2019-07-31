@@ -1,0 +1,64 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'owner', 'ls', 'restapp' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 silly mapToRegistry name restapp
+5 silly mapToRegistry using default registry
+6 silly mapToRegistry registry https://registry.npmjs.org/
+7 silly mapToRegistry uri https://registry.npmjs.org/restapp
+8 verbose request uri https://registry.npmjs.org/restapp
+9 verbose request no auth needed
+10 info attempt registry request try #1 at 11:12:03 PM
+11 verbose request id 00c9cf08fbd248f5
+12 http request GET https://registry.npmjs.org/restapp
+13 http 404 https://registry.npmjs.org/restapp
+14 verbose headers { date: 'Tue, 30 Jul 2019 06:12:04 GMT',
+14 verbose headers   'content-type': 'application/json',
+14 verbose headers   'content-length': '21',
+14 verbose headers   connection: 'keep-alive',
+14 verbose headers   'set-cookie': [ '__cfduid=d17d907c261a3c10dfb620f86331c6c001564467123; expires=Wed, 29-Jul-20 06:12:03 GMT; path=/; domain=.npmjs.org; HttpOnly' ],
+14 verbose headers   'cf-cache-status': 'MISS',
+14 verbose headers   'cache-control': 'max-age=300',
+14 verbose headers   'cf-ray': '4fe52dc2cd30a140-ICN',
+14 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+14 verbose headers   vary: 'accept-encoding, accept',
+14 verbose headers   server: 'cloudflare' }
+15 silly get cb [ 404,
+15 silly get   { date: 'Tue, 30 Jul 2019 06:12:04 GMT',
+15 silly get     'content-type': 'application/json',
+15 silly get     'content-length': '21',
+15 silly get     connection: 'keep-alive',
+15 silly get     'set-cookie': [ '__cfduid=d17d907c261a3c10dfb620f86331c6c001564467123; expires=Wed, 29-Jul-20 06:12:03 GMT; path=/; domain=.npmjs.org; HttpOnly' ],
+15 silly get     'cf-cache-status': 'MISS',
+15 silly get     'cache-control': 'max-age=300',
+15 silly get     'cf-ray': '4fe52dc2cd30a140-ICN',
+15 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+15 silly get     vary: 'accept-encoding, accept',
+15 silly get     server: 'cloudflare' } ]
+16 error owner ls Couldn't get owner data restapp
+17 verbose stack Error: Not found : restapp
+17 verbose stack     at makeError (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+17 verbose stack     at CachingRegistryClient.<anonymous> (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+17 verbose stack     at Request._callback (/usr/share/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+17 verbose stack     at Request.self.callback (/usr/share/npm/node_modules/request/request.js:198:22)
+17 verbose stack     at emitTwo (events.js:87:13)
+17 verbose stack     at Request.emit (events.js:172:7)
+17 verbose stack     at Request.<anonymous> (/usr/share/npm/node_modules/request/request.js:1082:10)
+17 verbose stack     at emitOne (events.js:82:20)
+17 verbose stack     at Request.emit (events.js:169:7)
+17 verbose stack     at IncomingMessage.<anonymous> (/usr/share/npm/node_modules/request/request.js:1009:12)
+18 verbose statusCode 404
+19 verbose pkgid restapp
+20 verbose cwd /root/dapps/restApp
+21 error Linux 4.15.0-45-generic
+22 error argv "/usr/bin/nodejs" "/usr/bin/npm" "owner" "ls" "restapp"
+23 error node v4.2.6
+24 error npm  v3.5.2
+25 error code E404
+26 error 404 Not found : restapp
+27 error 404
+28 error 404 'restapp' is not in the npm registry.
+29 error 404 You should bug the author to publish it (or use the name yourself!)
+30 error 404 Note that you can also install from a
+31 error 404 tarball, folder, http url, or git url.
+32 verbose exit [ 1, true ]
