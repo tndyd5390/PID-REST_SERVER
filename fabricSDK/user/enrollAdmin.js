@@ -8,7 +8,7 @@ var fabric_client = new Fabric_Client();
 var fabric_ca_client = null;
 var admin_user = null;
 var member_user = null;
-var store_path = path.join(__dirname, 'hfc-key-store');
+var store_path = path.join(__dirname, '../hfc-key-store');
 const CA_IP = "http://localhost:7054";
 
 const enrollAdmin = async() => {
@@ -64,14 +64,15 @@ const registerUser = async(admin, user, affiliation) =>{
         if(user_from_store && user_from_store.isEnrolled()){
             admin_user = user_from_store;
         }else {
-            throw new Error("Failed to get admin...");
+            throw new Error('Failed to get admin...');
         }
 
         var secret = await fabric_ca_client.register({enrollmentID: user, affiliation: affiliation, role: 'client'}, admin_user);
         
-        return {secret : secret};
+        return {already : false, secret : secret};
     }catch(err){
         console.log(err);
+        return {already : true};
     }
 }
 
