@@ -1,6 +1,7 @@
 ###
 get http://192.168.109.132:3000/fabric/getPersonalInfoByIdentifier/identifier1
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY1NTk4MDQyLCJleHAiOjE1NjU1OTgyMjJ9.yCvFPbubVzhoP7dC_jn0TtieZbv_eupKbcgo9LEUlnk
 
 {
     "identifier": "identifier1"
@@ -13,4 +14,13 @@ Content-Type: application/json
 {
     "API_KEY": "abcdefghijklmnop",
     "API_SECRET": "abcdefghijklmnop"
+}
+
+###
+POST http://192.168.109.132:3000/fabric/verifyToken
+Content-Type: application/json
+
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY1NTk3Mjc5LCJleHAiOjE1NjU1OTc0NTl9.CBm5KpB6FIVNjctGtNEc1BMVZjZ7Ic4sdAp4zrBh7x8"
 }

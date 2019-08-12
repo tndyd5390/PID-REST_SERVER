@@ -7,6 +7,20 @@ const secretObj = require("../config/jwt");
 const companyQuery = require("../query/company/company")();
 var async = require("async");
 
+_verifyToken = (token) => {
+    try{
+        var decoded = jwt.verify(token, secretObj.secret);
+        if(decoded){
+            return false;
+        }else{
+            return true;
+        }
+    }catch(err) {
+        console.log(err);
+        return true;
+    }
+}
+
 router.post('/registerUser', async function(req, res, next) {
     var {body} = req;
     var secret = await enrollAdmin.registerUser('admin',body.user, body.affiliation);
@@ -15,57 +29,43 @@ router.post('/registerUser', async function(req, res, next) {
 
 router.post("/getToken", async (req, res) => {
     const {body: {API_KEY, API_SECRET}} = req;
-    var result;
-    async.waterfall(
-        [
-            (callback) => {
-                companyQuery.getCompanyByAPIKEYandAPISECRET(API_KEY, API_SECRET, (err, result) => {
-                    if(err) return callback(err);
-                    callback(null, result);
-                })
-
+    var result = await companyQuery.getCompanyByAPIKEYandAPISECRET([API_KEY,API_SECRET]);
+    if(result.length == 1) {
+        let token = jwt.sign(
+            {
+                API_KEY,
+                API_SECRET
             },
-            (data, callback) => {
-                res.send(data);
-                callback(null, data);
+            secretObj.secret,
+            {
+                expiresIn: "3m"
             }
-        ],
-        (err, data) => {
-            if(err)console.log(err);
-            else {
-                console.log("111");
-                result = data;
-                console.log("222");
-            }
-        }
-    )
-    console.log("fff");
-    console.log(result);
-
-
-    // let token = jwt.sign(
-    //     {
-    //         API_KEY,
-    //         API_SECRET
-    //     },
-    //     secretObj.secret,
-    //     {
-    //         expiresIn: "3m"
-    //     }
-    // );
-
+        );
+        res.send(token);
+    } else {
+        res.send(null);
+    }
 })
 
-router.get("/getPersonalInfoByIdentifier/:identifier", async(req, res) => {
-    const {params: {id}} = req;
+router.post("/verifyToken", async(req, res) => {
+    const{body: {token}} = req;
+    res.send(_verifyToken(token));
+})
+
+router.post("/getPersonalInfoByIdentifier", async(req, res) => {
+    const {body: {identifier}} = req;
+    var token = req.get("authorization");
+    if(_verifyToken(token)){
+        res.send("Invalid token");
+        return;
+    }
     var result = await query.getPersonalInfoByIdentifier(
         "user2",
         {
-            identifier: "identifier1",
-            logs: "what the fuck"
+            identifier,
+            logs: "what the fucka"
         }
     );
-    //res.render("index", {title: result});
     res.send(result);
 })
 

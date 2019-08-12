@@ -42,7 +42,6 @@ const getAllPersonalInfo = async(user) => {
 
 const getPersonalInfoByIdentifier = async(user, personalInfoObj) => {
     personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
-    console.log(personalInfoObj);
 	if(
 		strIsEmpty(personalInfoObj.identifier) ||
 		strIsEmpty(personalInfoObj.logs)
