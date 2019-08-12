@@ -75,7 +75,7 @@ const registerUser = async(admin, user, affiliation) =>{
         return {already : true};
     }
 }
-
+enrollAdmin();
 module.exports = {
     enrollAdmin : enrollAdmin,
     registerUser : registerUser

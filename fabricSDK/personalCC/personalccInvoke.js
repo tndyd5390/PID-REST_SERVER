@@ -3,23 +3,21 @@ const Fabric_Client = require('fabric-client');
 const path = require('path');
 const util = require('util');
 const os = require('os');
+const utils = require("../utils");
+const {
+	nvl,
+	strIsEmpty
+} = utils
 
 //=========================================================
-const CHAINCODE_ID = "test27";
+const CHAINCODE_ID = "test1";
 const CHANNEL_NAME = "mychannel";
 const PEER_IP = "grpc://localhost:7051";
 const ORDERER_IP = "grpc://localhost:7050";
-const STORE_PATH = path.join(__dirname, "hfc-key-store");
+const STORE_PATH = path.join(__dirname, "../hfc-key-store");
 //=========================================================
 
-const nvl = (str) => {
-	return str || "";
-}
 
-const strIsEmpty = (str) => {
-	if (typeof str == "undefined" || str == null || str == "") return true;
-	else return false;
-}
 
 const checkPersonalInfoNvl = personalInfoObj => {
     personalInfoObj.identifier = nvl(personalInfoObj.identifier);
@@ -27,15 +25,18 @@ const checkPersonalInfoNvl = personalInfoObj => {
     personalInfoObj.address = nvl(personalInfoObj.address);
     personalInfoObj.email = nvl(personalInfoObj.email);
     personalInfoObj.password = nvl(personalInfoObj.password);
+    personalInfoObj.logs = nvl(personalInfoObj.logs);
     return personalInfoObj;
 }
 
 const createPersonalInfo = async (user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
     if (
         strIsEmpty(personalInfoObj.registrationNumber) ||
         strIsEmpty(personalInfoObj.address) ||
         strIsEmpty(personalInfoObj.email) ||
-        strIsEmpty(personalInfoObj.password)
+		strIsEmpty(personalInfoObj.password) || 
+		strIsEmpty(personalInfoObj.logs)
     ){
         return false;
     }
@@ -50,7 +51,8 @@ const createPersonalInfo = async (user, personalInfoObj) => {
             personalInfoObj.registrationNumber,
             personalInfoObj.address,
             personalInfoObj.email,
-            personalInfoObj.password
+            personalInfoObj.password,
+            personalInfoObj.logs
         ]
     );
     return result;
@@ -68,25 +70,47 @@ const modificatePersonalInfo = async(user, personalInfoObj) => {
             personalInfoObj.registrationNumber,
             personalInfoObj.address,
             personalInfoObj.email,
-            personalInfoObj.password
+            personalInfoObj.password,
+            personalInfoObj.logs
         ]
     );
     return result;
 }
 
-const deletePersonalInfo = async(user, identifier) => {
-    var result = await invoke(CHAINCODE_ID, "deletePersonalInfo", CHANNEL_NAME, user, [identifier]);
+const deletePersonalInfo = async(user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if(
+		strIsEmpty(personalInfoObj.identifier) || 
+		strIsEmpty(personalInfoObj.logs)
+	) return false;
+
+    var result = await invoke(
+		CHAINCODE_ID, 
+		"deletePersonalInfo", 
+		CHANNEL_NAME, 
+		user, 
+		[
+			personalInfoObj.identifier,
+			personalInfoObj.logs
+		]
+	);
     return result;
 }
 
 const main = async() => {
-    var result = await deletePersonalInfo(
+    var result = await createPersonalInfo(
         "user1", 
-        "identifier2"
+        {
+			identifier: "identifier1",
+			registrationNumber : "930522-1184516",
+			address: "home",
+			email: "tndyd5390@naver.com",
+			password: "tndyd5390@",
+			logs: "this is fuck"
+		}
     );
     console.log(result);
 }
-
 const invoke = async(chaincodeId, fcn, channelId, user, args = []) => {
 	var result = false;
 	console.log('\n\n --- invoke.js - start');
@@ -202,4 +226,9 @@ const invoke = async(chaincodeId, fcn, channelId, user, args = []) => {
 	return result;
 };
 
-main();
+
+module.exports = {
+	createPersonalInfo,
+	modificatePersonalInfo,
+	deletePersonalInfo
+}

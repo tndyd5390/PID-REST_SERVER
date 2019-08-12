@@ -8,7 +8,7 @@ var fabric_client = new Fabric_Client();
 var fabric_ca_client = null;
 var admin_user = null;
 var member_user = null;
-var store_path = path.join(__dirname, 'hfc-key-store');
+var store_path = path.join(__dirname, '../hfc-key-store');
 var AFFILIATION = "org1.department1";
 const CA_IP = "http://localhost:7054";
 const MSP_ID = "Org1MSP";
@@ -45,4 +45,4 @@ const registerUser = async(user, affiliation = AFFILIATION) => {
         console.log(err);
     }
 }
-registerUser("user1");
+registerUser("user2");
