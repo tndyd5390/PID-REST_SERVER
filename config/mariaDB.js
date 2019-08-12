@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var mysql = require('mysql2/promise');
 
 module.exports = function(){
     var config = {
@@ -11,12 +11,5 @@ module.exports = function(){
     
     var pool = mysql.createPool(config);
 
-    return {
-        getConnection : (callback) => {
-            pool.getConnection(callback);
-        },
-        end : (callback) => {
-            pool.end(callback);
-        }
-    };
+    return pool;
 }();

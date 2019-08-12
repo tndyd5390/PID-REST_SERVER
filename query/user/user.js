@@ -2,34 +2,34 @@ var pool = require('../../config/mariaDB');
 
 
 // 쿼리 실행 함수
-var _query = (sql, callback) =>{
-    // 매개변수 : sql, callback 함수
-    pool.getConnection((err, conn)=>{
-        conn.query(sql, (err, result, fields)=>{
-            // 쿼리 수행
-            conn.release();
-            if(err) return callback(err);
-            return callback(null, result);
-            // err = null, 결과 값 return
-        })
-    })
+var _query = async(sql, params) =>{
+    var conn = await pool.getConnection(async conn=> conn);
+    var [rows] = await conn.query(sql, params);
+    conn.release();
+    return rows;
 }
 
-var _getUser = (callback) =>{
+var _getUser =  async(params) =>{
     var sql = 'select * from USER_INFO';
-    // 수행할 sql
-
-    _query(sql, callback);
-    // 매개변수 : sql, callback 함수
+    var result = await _query(sql, params);
+    return result;
 };
+
+var _checkDupEmail= async(params) =>{
+    var sql = 'SELECT COUNT(1) FROM USER_INFO WHERE USER_EMAIL = ?';
+    var result = await _query(sql, params);
+    return result;
+}
 
 module.exports = () =>{
     return{
-        getUser : (callback)=>{
-            // callback 함수로 return
-            _getUser(callback);
+        getUser : async (params)=>{
+            var result = await _getUser(params);
+            return result;
         },
-        pool : pool
-        // connection close를 위한 pool 함수 return
+        checkDupEmail : async(params)=>{
+            var result = await _checkDupEmail(params);
+            return result;
+        }
     }
 }
