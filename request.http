@@ -5,3 +5,12 @@ Content-Type: application/json
 {
     "identifier": "identifier1"
 }
+
+###
+POST http://192.168.109.132:3000/fabric/getToken
+Content-Type: application/json
+
+{
+    "API_KEY": "abcdefghijklmnop",
+    "API_SECRET": "abcdefghijklmnop"
+}
