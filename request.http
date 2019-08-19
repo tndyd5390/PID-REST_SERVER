@@ -1,14 +1,14 @@
 ###
-get http://192.168.109.132:3000/fabric/getPersonalInfoByIdentifier/identifier1
+POST http://192.168.109.132:3000/fabric/getPersonalInfoByIdentifier
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY1NTk4MDQyLCJleHAiOjE1NjU1OTgyMjJ9.yCvFPbubVzhoP7dC_jn0TtieZbv_eupKbcgo9LEUlnk
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY2MTk2MDExLCJleHAiOjE1NjYxOTYxOTF9.47oA_Wz4g70oOxVQa3XNKHgn3fOJifT5yYgydisFIug
 
 {
     "identifier": "identifier1"
 }
 
 ###
-POST http://192.168.109.132:3000/fabric/getToken
+POST http://192.168.109.132:5000/company/getToken
 Content-Type: application/json
 
 {
@@ -22,5 +22,5 @@ Content-Type: application/json
 
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY1NTk3Mjc5LCJleHAiOjE1NjU1OTc0NTl9.CBm5KpB6FIVNjctGtNEc1BMVZjZ7Ic4sdAp4zrBh7x8"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY2MTk0NzIxLCJleHAiOjE1NjYxOTQ5MDF9.9YrTzZ9dNxfksZ0vHUSQAshyIYKOuRVolnTvXIfHpko"
 }
