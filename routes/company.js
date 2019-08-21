@@ -80,9 +80,6 @@ router.post("/companyJoinRequest", async(req, res) => {
         address,
         addressDetail
     }} = req;
-    console.log("=======================");
-    console.log(companyName);
-    console.log("00000000000000000000000000000");
     var params = [
         companyName,
         companyRegistrationNumber,
@@ -94,13 +91,34 @@ router.post("/companyJoinRequest", async(req, res) => {
         addressDetail,
         "1"
     ];
-
     var insertQuery = await companyQuery.insertCompanyJoinRequest(params);
-
-    console.log(insertQuery);
-
     res.send("true");
+})
 
+router.get("/checkCompanyRegistrationNumber/:registrationNumber", async(req, res) => {
+    var {params:{registrationNumber}} = req;
+    var selectQuery = await companyQuery.checkCompanyRegistrationNumber(registrationNumber);
+    if(selectQuery.length != 0){
+        res.send(true);
+    }else{
+        res.send(false);
+    }
+})
+
+router.get("/checkCompanyId/:companyId", async(req, res) => {
+    var {params: {companyId}} = req;
+    var queryResult = await companyQuery.checkCompanyId(companyId);
+    console.log(queryResult.length);
+    if(queryResult.length != 0){
+        res.send(true);
+    } else {
+        res.send(false);
+    }
+})
+
+router.get("/companyReqList", async(req, res) => {
+    var queryResult = await companyQuery.getCompanyReqList();
+    res.send(queryResult);
 })
 
 module.exports = router;
