@@ -69,11 +69,12 @@ router.post("/getPersonalInfoByIdentifier", async(req, res) => {
     res.send(result);
 })
 
-router.post("/companyJoinRequest", async(req, res) => {
+router.post("/", async(req, res) => {
     var { body: {
         companyName,
         companyRegistrationNumber,
         companyRepresentativeName,
+        companyContactNumber,
         companyId,
         password,
         companyPostCode,
@@ -84,6 +85,7 @@ router.post("/companyJoinRequest", async(req, res) => {
         companyName,
         companyRegistrationNumber,
         companyRepresentativeName,
+        companyContactNumber,
         companyId,
         password,
         companyPostCode,
@@ -108,7 +110,6 @@ router.get("/checkCompanyRegistrationNumber/:registrationNumber", async(req, res
 router.get("/checkCompanyId/:companyId", async(req, res) => {
     var {params: {companyId}} = req;
     var queryResult = await companyQuery.checkCompanyId(companyId);
-    console.log(queryResult.length);
     if(queryResult.length != 0){
         res.send(true);
     } else {
@@ -116,9 +117,27 @@ router.get("/checkCompanyId/:companyId", async(req, res) => {
     }
 })
 
-router.get("/companyReqList", async(req, res) => {
-    var queryResult = await companyQuery.getCompanyReqList();
+router.get("/", async(req, res) => {
+    var queryResult = await companyQuery.getCompanyList();
     res.send(queryResult);
+})
+
+router.put("/:companyNo", async(req, res) => {
+    var {params: {companyNo}} = req;
+    var {body: {companyObj}} = req;
+    var targetCompany = await companyQuery.getCompanyByCompanyNo(companyNo);
+    var updateCompanyObj = Object.assign({}, targetCompany[0], companyObj);
+    var updateCompanyArr = Object.values(updateCompanyObj);
+    if(updateCompanyArr.length != Object.values(targetCompany[0]).length) {
+        res.send(false);
+        return;
+    }
+    var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyArr);
+    if(updateResult.changedRows != 0) {
+        res.send(true);
+    } else {
+        res.send(false);
+    }
 })
 
 module.exports = router;

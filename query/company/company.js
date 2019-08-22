@@ -23,6 +23,7 @@ const _insertCompanyJoinRequest = async (params) => {
             COMPANY_NAME,
             COMPANY_REGISTRATION_NUMBER,
             COMPANY_REPRESENTATIVE_NAME,
+            COMPANY_CONTACT_NUMBER,
             COMPANY_ID,
             COMPANY_PASSWORD,
             COMPANY_POSTCODE,
@@ -41,7 +42,8 @@ const _insertCompanyJoinRequest = async (params) => {
             ?,
             ?,
             ?,
-            "1",
+            ?,
+            "0",
             NOW()
         )
     `;
@@ -66,22 +68,60 @@ const _checkCompanyId = async(companyId) => {
     return await _query(sql, companyId);
 }
 
-const _getCompanyReqList = async() => {
+const _getCompanyList = async() => {
     var sql = `
         SELECT COMPANY_NO,
                COMPANY_NAME,
                COMPANY_REGISTRATION_NUMBER,
                COMPANY_REPRESENTATIVE_NAME,
+               COMPANY_CONTACT_NUMBER,
                COMPANY_ID,
                COMPANY_PASSWORD,
                COMPANY_POSTCODE,
                COMPANY_ADDRESS,
-               COMPANY_ADDRESS_DETAIL
+               COMPANY_ADDRESS_DETAIL,
+               REG_DATE,
+               COMPANY_REQ_STATUS
           FROM COMPANY
-         WHERE COMPANY_REQ_STATUS = 1
     `;
 
     return await _query(sql);
+}
+
+const _getCompanyByCompanyNo = async companyNo => {
+    var sql = `
+        SELECT COMPANY_NAME                 AS companyName,
+               COMPANY_REGISTRATION_NUMBER  AS companyRegistrationNumber,
+               COMPANY_REPRESENTATIVE_NAME  AS companyRepresentativeName,
+               COMPANY_CONTACT_NUMBER       AS companyContactNumber,
+               COMPANY_ID                   AS companyId,
+               COMPANY_POSTCODE             AS companyPostcode,
+               COMPANY_ADDRESS              AS companyAddress,
+               COMPANY_ADDRESS_DETAIL       AS companyAddressDetail,
+               COMPANY_REQ_STATUS           AS companyReqStatus
+          FROM COMPANY
+         WHERE COMPANY_NO = ?
+    `;
+
+    return await _query(sql, companyNo);
+}
+
+const _updateCompany = async(companyNo, params) => {
+    var sql = `
+        UPDATE COMPANY
+           SET COMPANY_NAME                 =?,
+               COMPANY_REGISTRATION_NUMBER  =?,
+               COMPANY_REPRESENTATIVE_NAME  =?,
+               COMPANY_CONTACT_NUMBER       =?,
+               COMPANY_ID                   =?,
+               COMPANY_POSTCODE             =?,
+               COMPANY_ADDRESS              =?,
+               COMPANY_ADDRESS_DETAIL       =?,
+               COMPANY_REQ_STATUS           =?,
+               CHG_DATE                     =NOW()
+         WHERE COMPANY_NO = "${companyNo}"
+    `;
+    return await _query(sql, params);
 }
 
 module.exports = () => {
@@ -98,8 +138,14 @@ module.exports = () => {
         checkCompanyId: async(companyId) => {
             return await _checkCompanyId(companyId);
         },
-        getCompanyReqList: async() => {
-            return await _getCompanyReqList();
+        getCompanyList: async() => {
+            return await _getCompanyList();
+        },
+        getCompanyByCompanyNo: async companyNo => {
+            return await _getCompanyByCompanyNo(companyNo);
+        },
+        updateCompany: async (companyNo, params) => {
+            return await _updateCompany(companyNo, params);
         },
         pool: pool
     }
