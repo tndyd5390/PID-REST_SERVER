@@ -122,6 +122,12 @@ router.get("/", async(req, res) => {
     res.send(queryResult);
 })
 
+router.get("/:companyNo", async(req, res) => {
+    var {params: {companyNo}} = req;
+    var queryResult = await companyQuery.getCompanyByCompanyNo(companyNo);
+    res.send(queryResult[0]);
+})
+
 router.put("/:companyNo", async(req, res) => {
     var {params: {companyNo}} = req;
     var {body: {companyObj}} = req;
