@@ -146,4 +146,11 @@ router.put("/:companyNo", async(req, res) => {
     }
 })
 
+router.post("/checkPassword", async(req,res) => {
+    var{body: {companyNo, password}} = req;
+    var selectQuery = await companyQuery.checkPassword([companyNo, password]);
+    if(selectQuery.length === 1) res.send(true);
+    else res.send(false);
+})
+
 module.exports = router;

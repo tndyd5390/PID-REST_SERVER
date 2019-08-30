@@ -90,7 +90,8 @@ const _getCompanyList = async() => {
 
 const _getCompanyByCompanyNo = async companyNo => {
     var sql = `
-        SELECT COMPANY_NAME                 AS companyName,
+        SELECT COMPANY_NO                   AS companyNo,
+               COMPANY_NAME                 AS companyName,
                COMPANY_REGISTRATION_NUMBER  AS companyRegistrationNumber,
                COMPANY_REPRESENTATIVE_NAME  AS companyRepresentativeName,
                COMPANY_CONTACT_NUMBER       AS companyContactNumber,
@@ -98,7 +99,9 @@ const _getCompanyByCompanyNo = async companyNo => {
                COMPANY_POSTCODE             AS companyPostcode,
                COMPANY_ADDRESS              AS companyAddress,
                COMPANY_ADDRESS_DETAIL       AS companyAddressDetail,
-               COMPANY_REQ_STATUS           AS companyReqStatus
+               COMPANY_REQ_STATUS           AS companyReqStatus,
+               COMPANY_API_KEY              AS companyApiKey,
+               COMPANY_API_SECRET           AS companyApiSecret
           FROM COMPANY
          WHERE COMPANY_NO = ?
     `;
@@ -124,6 +127,16 @@ const _updateCompany = async(companyNo, params) => {
     return await _query(sql, params);
 }
 
+const _checkPassword = async(params) => {
+    var sql = `
+        SELECT COMPANY_NAME
+          FROM COMPANY
+         WHERE COMPANY_NO = ? AND COMPANY_PASSWORD = ?
+    `;
+
+    return await _query(sql, params);
+}
+
 module.exports = () => {
     return {
         getCompanyByAPIKEYandAPISECRET: async (params) => {
@@ -146,6 +159,9 @@ module.exports = () => {
         },
         updateCompany: async (companyNo, params) => {
             return await _updateCompany(companyNo, params);
+        },
+        checkPassword: async params => {
+            return await _checkPassword(params);
         },
         pool: pool
     }
