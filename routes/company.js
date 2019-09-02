@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const secretObj = require("../config/jwt");
 const companyQuery = require("../query/company/company")();
 var async = require("async");
+const crypto = require("../crypto");
 
 _verifyToken = (token) => {
     try{
@@ -128,6 +129,24 @@ router.get("/:companyNo", async(req, res) => {
     res.send(queryResult[0]);
 })
 
+router.post("/approveCompanyJoin", async(req, res) => {
+    var {body: {companyNo}} = req;
+    var selectQuery = await companyQuery.getCompanyByCompanyNo(companyNo);
+    var API_KEY = crypto.SHA256Encode(selectQuery[0].companyRegistrationNumber);
+    console.log("API_key : " + API_KEY);
+    var API_SECRET = crypto.AESEncode(
+        selectQuery[0].companyNo + 
+        selectQuery[0].companyName + 
+        selectQuery[0].companyRegistrationNumber + 
+        selectQuery[0].companyRepresentativeName + 
+        selectQuery[0].companyContactNumber + 
+        selectQuery[0].companyPostCode + 
+        selectQuery[0].companyAddress + 
+        selectQuery[0].companyAddressDetail
+    )
+    console.log("secret : " + API_SECRET);
+})
+
 router.put("/:companyNo", async(req, res) => {
     var {params: {companyNo}} = req;
     var {body: {companyObj}} = req;
@@ -151,6 +170,16 @@ router.post("/checkPassword", async(req,res) => {
     var selectQuery = await companyQuery.checkPassword([companyNo, password]);
     if(selectQuery.length === 1) res.send(true);
     else res.send(false);
+})
+
+router.post("/updatePassword", async(req, res) => {
+    var {body: {companyNo, newPassword}} = req;
+    var updateQuery = await companyQuery.updatePassword([newPassword, companyNo]);
+    if(updateQuery.changedRows != 0){
+        res.send(true);
+    } else {
+        res.send(false);
+    }
 })
 
 module.exports = router;

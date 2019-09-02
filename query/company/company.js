@@ -4,7 +4,6 @@ var pool = require('../../config/mariaDB');
 // 쿼리 실행 함수
 var _query = async(sql, params = []) =>{
     var conn = await pool.getConnection(async conn=> conn);
-    console.log(sql);
     var [rows] = await conn.query(sql, params);
     conn.release();
     return rows;
@@ -137,6 +136,15 @@ const _checkPassword = async(params) => {
     return await _query(sql, params);
 }
 
+const _updatePassword = async(params) => {
+    var sql = `
+        UPDATE COMPANY
+           SET COMPANY_PASSWORD = ?
+         WHERE COMPANY_NO = ?
+    `;
+    return await _query(sql, params);
+}
+
 module.exports = () => {
     return {
         getCompanyByAPIKEYandAPISECRET: async (params) => {
@@ -162,6 +170,9 @@ module.exports = () => {
         },
         checkPassword: async params => {
             return await _checkPassword(params);
+        },
+        updatePassword: async params => {
+            return await _updatePassword(params);
         },
         pool: pool
     }
