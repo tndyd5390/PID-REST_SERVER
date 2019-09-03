@@ -145,6 +145,35 @@ const _updatePassword = async(params) => {
     return await _query(sql, params);
 }
 
+const _updateAPIInfo = async(params) => {
+    var sql = `
+        UPDATE COMPANY
+           SET COMPANY_API_KEY = ?,
+               COMPANY_API_SECRET = ?
+         WHERE COMPANY_NO = ?
+    `;
+    return await _query(sql, params);
+}
+
+const _updateCompanyReqStatus = async params => {
+    var sql = `
+        UPDATE COMPANY
+           SET COMPANY_REQ_STATUS = ?
+         WHERE COMPANY_NO = ?
+    `;
+    return await _query(sql, params);
+}
+
+const _getCompanyReqStatus = async params => {
+    var sql = `
+        SELECT COMPANY_REQ_STATUS AS companyReqStatus
+          FROM COMPANY
+         WHERE COMPANY_NO = ?
+    `;
+
+    return await _query(sql, params);
+}
+
 module.exports = () => {
     return {
         getCompanyByAPIKEYandAPISECRET: async (params) => {
@@ -173,6 +202,15 @@ module.exports = () => {
         },
         updatePassword: async params => {
             return await _updatePassword(params);
+        },
+        updateAPIInfo: async params => {
+            return await _updateAPIInfo(params);
+        },
+        updateCompanyReqStatus: async(params) => {
+            return await _updateCompanyReqStatus(params);
+        },
+        getCompanyReqStatus: async params => {
+            return await _getCompanyReqStatus(params);
         },
         pool: pool
     }

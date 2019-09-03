@@ -101,21 +101,13 @@ router.post("/", async(req, res) => {
 router.get("/checkCompanyRegistrationNumber/:registrationNumber", async(req, res) => {
     var {params:{registrationNumber}} = req;
     var selectQuery = await companyQuery.checkCompanyRegistrationNumber(registrationNumber);
-    if(selectQuery.length != 0){
-        res.send(true);
-    }else{
-        res.send(false);
-    }
+    res.send(String(selectQuery.length));
 })
 
 router.get("/checkCompanyId/:companyId", async(req, res) => {
     var {params: {companyId}} = req;
     var queryResult = await companyQuery.checkCompanyId(companyId);
-    if(queryResult.length != 0){
-        res.send(true);
-    } else {
-        res.send(false);
-    }
+    res.send(String(queryResult.length));
 })
 
 router.get("/", async(req, res) => {
@@ -132,19 +124,29 @@ router.get("/:companyNo", async(req, res) => {
 router.post("/approveCompanyJoin", async(req, res) => {
     var {body: {companyNo}} = req;
     var selectQuery = await companyQuery.getCompanyByCompanyNo(companyNo);
-    var API_KEY = crypto.SHA256Encode(selectQuery[0].companyRegistrationNumber);
-    console.log("API_key : " + API_KEY);
-    var API_SECRET = crypto.AESEncode(
-        selectQuery[0].companyNo + 
-        selectQuery[0].companyName + 
-        selectQuery[0].companyRegistrationNumber + 
-        selectQuery[0].companyRepresentativeName + 
-        selectQuery[0].companyContactNumber + 
-        selectQuery[0].companyPostCode + 
-        selectQuery[0].companyAddress + 
-        selectQuery[0].companyAddressDetail
-    )
-    console.log("secret : " + API_SECRET);
+    try{
+        var API_KEY = await crypto.SHA256Encode(selectQuery[0].companyRegistrationNumber);
+        var API_SECRET = await crypto.AESEncode(
+            selectQuery[0].companyNo + 
+            selectQuery[0].companyName + 
+            selectQuery[0].companyRegistrationNumber + 
+            selectQuery[0].companyRepresentativeName + 
+            selectQuery[0].companyContactNumber + 
+            selectQuery[0].companyPostcode + 
+            selectQuery[0].companyAddress + 
+            selectQuery[0].companyAddressDetail,
+            API_KEY
+        );
+        var APIupdateResult = await companyQuery.updateAPIInfo([API_KEY, API_SECRET, companyNo]);
+        var statusUpdateResult = await companyQuery.updateCompanyReqStatus([1, companyNo]);
+        if(APIupdateResult.changedRows == 1 && statusUpdateResult.changedRows == 1){
+            res.send(true);
+        } else {
+            res.send(false);
+        }
+    }catch(err){ 
+        console.log(err);
+    }
 })
 
 router.put("/:companyNo", async(req, res) => {
@@ -180,6 +182,12 @@ router.post("/updatePassword", async(req, res) => {
     } else {
         res.send(false);
     }
+})
+
+router.post("/getCompanyReqStatus", async(req, res) => {
+    var {body: {companyNo}} = req;
+    var selectQuery = await companyQuery.getCompanyReqStatus([companyNo]);
+    res.send(selectQuery[0].companyReqStatus);
 })
 
 module.exports = router;
