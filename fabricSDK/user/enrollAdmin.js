@@ -69,13 +69,12 @@ const registerUser = async(admin, user, affiliation) =>{
 
         var secret = await fabric_ca_client.register({enrollmentID: user, affiliation: affiliation, role: 'client'}, admin_user);
         
-        return {already : false, secret : secret};
+        return {secret : secret};
     }catch(err){
         console.log(err);
-        return {already : true};
     }
 }
-
+enrollAdmin();
 module.exports = {
     enrollAdmin : enrollAdmin,
     registerUser : registerUser

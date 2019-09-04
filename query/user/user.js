@@ -7,7 +7,7 @@ var _query = async(sql, params) =>{
     var [rows] = await conn.query(sql, params);
     conn.release();
     return rows;
-}
+};
 
 var _getUser =  async(params) =>{
     var sql = 'select * from USER_INFO';
@@ -19,12 +19,17 @@ var _checkDupEmail= async(params) =>{
     var sql = 'SELECT COUNT(1) AS COUNT FROM USER_INFO WHERE USER_EMAIL = ?';
     var result = await _query(sql, params);
     return result;
-}
+};
 
 var _insertUser = async(params) =>{
-    var sql = 'INSERT INTO USER_INFO (USER_EMAIL, PASSWORD, MSP_PASSWORD, MSP_AFFILIATION, REG_DATE) VALUES (?, PASSWORD(?), ?, ?,NOW())'
+    var sql = 'INSERT INTO USER_INFO (USER_EMAIL, PASSWORD, MSP_PASSWORD, MSP_AFFILIATION, REG_DATE, AUTH) VALUES (?, PASSWORD(?), ?, ?, NOW(), "U")';
     var result = await _query(sql, params);
-    console.log(result);
+    return result;
+};
+
+var _loginProc = async(params) =>{
+    var sql = 'SELECT COUNT(1) AS COUNT, MSP_PASSWORD AS SECRET, AUTH FROM USER_INFO WHERE USER_EMAIL = ? AND PASSWORD = PASSWORD(?)';
+    var result = await _query(sql, params);
     return result;
 }
 
@@ -40,6 +45,10 @@ module.exports = () =>{
         },
         insertUser : async(params)=>{
             var result = await _insertUser(params);
+            return result;
+        },
+        loginProc : async(params)=>{
+            var result = await _loginProc(params);
             return result;
         }
     }
