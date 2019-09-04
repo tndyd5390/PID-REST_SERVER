@@ -3,9 +3,13 @@ var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
 var os = require('os');
-
+const utils = require("../utils")
+const {
+	nvl,
+	strIsEmpty
+} = utils
 //==========================================
-const CHAINCODE_ID = "test27";
+const CHAINCODE_ID = "test1";
 const CHANNEL_NAME = "mychannel";
 const PEER_IP = "grpc://localhost:7051";
 //==========================================
@@ -15,51 +19,130 @@ var channel = fabric_client.newChannel(CHANNEL_NAME);
 var peer = fabric_client.newPeer(PEER_IP);
 channel.addPeer(peer);
 var member_user = null;
-var store_path = path.join(__dirname, 'hfc-key-store');
+var store_path = path.join(__dirname, '../hfc-key-store');
+
+const checkPersonalInfoNvl = personalInfoObj => {
+    personalInfoObj.identifier = nvl(personalInfoObj.identifier);
+    personalInfoObj.registrationNumber = nvl(personalInfoObj.registrationNumber);
+    personalInfoObj.address = nvl(personalInfoObj.address);
+    personalInfoObj.email = nvl(personalInfoObj.email);
+    personalInfoObj.password = nvl(personalInfoObj.password);
+    personalInfoObj.logs = nvl(personalInfoObj.logs);
+    return personalInfoObj;
+}
 
 const getAllPersonalInfo = async(user) => {
-    var result = await query(CHAINCODE_ID, "getAllPersonalInfo", user);
+    var result = await query(
+		CHAINCODE_ID,
+		"getAllPersonalInfo",
+		user
+	);
     return result;
 }
 
-const getPersonalInfoByIdentifier = async(user, identifier) => {
-	var result = await query(CHAINCODE_ID, "getPersonalInfoByIdentifier", user, [identifier]);
+const getPersonalInfoByIdentifier = async(user, personalInfoObj) => {
+    personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if(
+		strIsEmpty(personalInfoObj.identifier) ||
+		strIsEmpty(personalInfoObj.logs)
+	) return false;
+
+	var result = await query(
+		CHAINCODE_ID,
+		"getPersonalInfoByIdentifier",
+		user,
+		[
+			personalInfoObj.identifier
+		]
+	);
+
+	require("./personalccInvoke").modificatePersonalInfo(
+	    user,
+		{
+			identifier: personalInfoObj.identifier,
+			logs: personalInfoObj.logs
+		}
+	)
 	return result;
 }
 
-const queryPersonalInfoByRegistrationNumber = async(user, registrationNumber) => {
-	var result = await query(CHAINCODE_ID, "queryPersonalInfoByRegistrationNumber", user, [registrationNumber]);
+const queryPersonalInfoByRegistrationNumber = async(user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if (strIsEmpty(personalInfoObj.registrationNumber)) return false;
+	var result = await query(
+		CHAINCODE_ID,
+		"queryPersonalInfoByRegistrationNumber",
+		user,
+		[personalInfoObj.registrationNumber]
+    );
+    
+    require("./personalccInvoke").modificatePersonalInfo(
+        "user1",
+        {
+            identifier: personalInfoObj.identifier,
+            logs: personalInfoObj.logs
+        }
+    )
+
 	return result;
 }
 
-const queryPersonalInfoByAddress = async(user, address) => {
-	var result = await query(CHAINCODE_ID, "queryPersonalInfoByAddress", user, [address]);
+const queryPersonalInfoByAddress = async(user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if(strIsEmpty(personalInfoObj.address)) return false;
+	var result = await query(
+		CHAINCODE_ID,
+		"queryPersonalInfoByAddress",
+		user,
+		[personalInfoObj.address]
+	);
 	return result;
 }
 
-const queryPersonalInfoByEmail = async(user, email) => {
-	var result = await query(CHAINCODE_ID, "queryPersonalInfoByEmail", user, [email]);
+const queryPersonalInfoByEmail = async(user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if(strIsEmpty(personalInfoObj.email)) return false;
+	var result = await query(
+		CHAINCODE_ID,
+		"queryPersonalInfoByEmail",
+		user,
+		[personalInfoObj.email]
+	);
 	return result;
 }
 
-const queryPersonalInfoByPassword = async(user, password) => {
-	var result = await query(CHAINCODE_ID, "queryPersonalInfoByPassword", user, [password]);
+const queryPersonalInfoByPassword = async(user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if(strIsEmpty(personalInfoObj.password)) return false;
+	var result = await query(
+		CHAINCODE_ID,
+		"queryPersonalInfoByPassword",
+		user,
+		[personalInfoObj.password]
+	);
 	return result;
 }
 
 const queryPersonalInfoByQueryString = async(user, queryString) => {
-	var result = await query(CHAINCODE_ID, "queryPersonalInfoByQueryString", user, [queryString]);
+	var result = await query(
+		CHAINCODE_ID,
+		"queryPersonalInfoByQueryString",
+		user,
+		[queryString]
+	);
 	return result;
 }
 
-const getHistoryPersonalInfo = async(user, identifier) => {
-	var result = await query(CHAINCODE_ID, "getHistoryPersonalInfo", user, [identifier]);
+const getHistoryPersonalInfo = async(user, personalInfoObj) => {
+	personalInfoObj = checkPersonalInfoNvl(personalInfoObj);
+	if(strIsEmpty(personalInfoObj.identifier)) return false;
+	var result = await query(
+		CHAINCODE_ID,
+		"getHistoryPersonalInfo",
+		user,
+		[personalInfoObj.identifier]
+	);
 	return result;
-}
-
-const main = async() => {
-    var result = await getAllPersonalInfo("user1");
-    console.log(result);
 }
 
 const query = async(chaincodeId, fcn, user, args = []) => {
@@ -99,4 +182,13 @@ const query = async(chaincodeId, fcn, user, args = []) => {
 	return result;
 }
 
-main();
+module.exports = {
+    getAllPersonalInfo,
+    getPersonalInfoByIdentifier,
+    queryPersonalInfoByRegistrationNumber,
+    queryPersonalInfoByAddress,
+    queryPersonalInfoByEmail,
+    queryPersonalInfoByPassword,
+    queryPersonalInfoByQueryString,
+    getHistoryPersonalInfo
+}

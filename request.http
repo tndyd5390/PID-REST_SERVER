@@ -1,0 +1,26 @@
+###
+POST http://192.168.109.132:5000/company/getPersonalInfoByIdentifier
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiMTVlMmIwZDNjMzM4OTFlYmIwZjFlZjYwOWVjNDE5NDIwYzIwZTMyMGNlOTRjNjVmYmM4YzMzMTI0NDhlYjIyNSIsIkFQSV9TRUNSRVQiOiJVMkZzZEdWa1gxOHlwWk8xb2ZqZUZiSlFYTmZzR2FzMDhrZU5xbDlsZlRVNVp1Z1VRcmYrcjM2cHBwOE8wT2wwVThrWWQxeU1uQ3RISFZjaS8vRGs1bVkzcklqVk95d1NoQU82OU8xY3crbXFCM1F5cVpna3d3dU84cW1MeVY0N3pRQ3cwdkJjbUhCL1RnWXQyVFpyYVZJTDZUWTREQ1ZLZ05qMGVHQVFhc0E9IiwiaWF0IjoxNTY3NDg2MzAxLCJleHAiOjE1Njc0ODY0ODF9.QDrobgfdLvs8FzyC5UdJ-D3Upd1u5LWnHZca74YHBkc
+
+{
+    "identifier": "identifier1"
+}
+
+###
+POST http://192.168.109.132:5000/company/getToken
+Content-Type: application/json
+
+{
+    "API_KEY": "15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225",
+    "API_SECRET": "U2FsdGVkX18ypZO1ofjeFbJQXNfsGas08keNql9lfTU5ZugUQrf+r36ppp8O0Ol0U8kYd1yMnCtHHVci//Dk5mY3rIjVOywShAO69O1cw+mqB3QyqZgkwwuO8qmLyV47zQCw0vBcmHB/TgYt2TZraVIL6TY4DCVKgNj0eGAQasA="
+}
+
+###
+POST http://192.168.109.132:3000/fabric/verifyToken
+Content-Type: application/json
+
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY2MTk0NzIxLCJleHAiOjE1NjYxOTQ5MDF9.9YrTzZ9dNxfksZ0vHUSQAshyIYKOuRVolnTvXIfHpko"
+}

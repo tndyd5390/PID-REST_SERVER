@@ -33,5 +33,4 @@ router.post('/checkDupEmail', async (req, res)=>{
 
     res.send(result[0]);
 });
-
 module.exports = router;
