@@ -152,19 +152,25 @@ router.post("/approveCompanyJoin", async(req, res) => {
 router.put("/:companyNo", async(req, res) => {
     var {params: {companyNo}} = req;
     var {body: {companyObj}} = req;
+    console.log("companyObj");
+    console.log(companyObj);
     var targetCompany = await companyQuery.getCompanyByCompanyNo(companyNo);
+    console.log("target");
+    console.log(targetCompany);
     var updateCompanyObj = Object.assign({}, targetCompany[0], companyObj);
     var updateCompanyArr = Object.values(updateCompanyObj);
     if(updateCompanyArr.length != Object.values(targetCompany[0]).length) {
         res.send(false);
         return;
     }
-    var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyArr);
-    if(updateResult.changedRows != 0) {
-        res.send(true);
-    } else {
-        res.send(false);
-    }
+    console.log(updateCompanyArr);
+    // var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyArr);
+    // if(updateResult.changedRows != 0) {
+    //     res.send(true);
+    // } else {
+    //     res.send(false);
+    // }
+    res.send(true);
 })
 
 router.post("/checkPassword", async(req,res) => {
