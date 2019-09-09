@@ -174,6 +174,22 @@ const _getCompanyReqStatus = async params => {
     return await _query(sql, params);
 }
 
+const _loginProc = async params => {
+    var sql = `
+        SELECT COMPANY_NO   AS companyNo,
+               COMPANY_NAME AS companyName,
+               COMPANY_ID   AS companyId
+          FROM COMPANY
+         WHERE COMPANY_REQ_STATUS = 1 
+           AND COMPANY_ID = ?
+           AND COMPANY_PASSWORD = ?
+    `;
+    console.log(params);
+    console.log(sql);
+
+    return await _query(sql, params);
+}
+
 module.exports = () => {
     return {
         getCompanyByAPIKEYandAPISECRET: async (params) => {
@@ -211,6 +227,9 @@ module.exports = () => {
         },
         getCompanyReqStatus: async params => {
             return await _getCompanyReqStatus(params);
+        },
+        loginProc: async params => {
+            return await _loginProc(params);
         },
         pool: pool
     }

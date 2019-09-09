@@ -152,24 +152,20 @@ router.post("/approveCompanyJoin", async(req, res) => {
 router.put("/:companyNo", async(req, res) => {
     var {params: {companyNo}} = req;
     var {body: {companyObj}} = req;
-    console.log("companyObj");
-    console.log(companyObj);
     var targetCompany = await companyQuery.getCompanyByCompanyNo(companyNo);
-    console.log("target");
-    console.log(targetCompany);
     var updateCompanyObj = Object.assign({}, targetCompany[0], companyObj);
     var updateCompanyArr = Object.values(updateCompanyObj);
     if(updateCompanyArr.length != Object.values(targetCompany[0]).length) {
         res.send(false);
         return;
     }
-    console.log(updateCompanyArr);
-    // var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyArr);
-    // if(updateResult.changedRows != 0) {
-    //     res.send(true);
-    // } else {
-    //     res.send(false);
-    // }
+    updateCompanyArr = updateCompanyArr.slice(1, updateCompanyArr.length);
+    var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyArr);
+    if(updateResult.changedRows != 0) {
+        res.send(true);
+    } else {
+        res.send(false);
+    }
     res.send(true);
 })
 
@@ -194,6 +190,17 @@ router.post("/getCompanyReqStatus", async(req, res) => {
     var {body: {companyNo}} = req;
     var selectQuery = await companyQuery.getCompanyReqStatus([companyNo]);
     res.send(selectQuery[0].companyReqStatus);
+})
+
+router.post("/loginProc", async(req, res) => {
+    var {body: {id, password}} = req;
+    var selectQuery = await companyQuery.loginProc([id, password]);
+    console.log(selectQuery);
+    if(selectQuery.length > 0){
+        res.send(selectQuery[0]);
+    }else {
+        res.send(null);
+    }
 })
 
 module.exports = router;
