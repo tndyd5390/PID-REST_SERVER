@@ -180,8 +180,7 @@ const _loginProc = async params => {
                COMPANY_NAME AS companyName,
                COMPANY_ID   AS companyId
           FROM COMPANY
-         WHERE COMPANY_REQ_STATUS = 1 
-           AND COMPANY_ID = ?
+         WHERE COMPANY_ID = ?
            AND COMPANY_PASSWORD = ?
     `;
     console.log(params);
