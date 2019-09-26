@@ -2,11 +2,11 @@ var mysql = require('mysql2/promise');
 
 module.exports = function(){
     var config = {
-        host : '192.168.109.132',
+        host : '39.115.19.152',
         port : 3306,
         user : 'root',
-        password : '1234',
-        database : 'fabricDB'
+        password : 'icn0690!',
+        database : 'pidDB'
     };
     
     var pool = mysql.createPool(config);

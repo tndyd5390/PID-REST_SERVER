@@ -12,9 +12,9 @@ _verifyToken = (token) => {
     try{
         var decoded = jwt.verify(token, secretObj.secret);
         if(decoded){
-            return false;
-        }else{
             return true;
+        }else{
+            return false;
         }
     }catch(err) {
         console.log(err);
@@ -56,7 +56,7 @@ router.post("/verifyToken", async(req, res) => {
 router.post("/getPersonalInfoByIdentifier", async(req, res) => {
     const {body: {identifier}} = req;
     var token = req.get("authorization");
-    if(_verifyToken(token)){
+    if(!_verifyToken(token)){
         res.send("Invalid token");
         return;
     }

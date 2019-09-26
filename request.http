@@ -17,10 +17,19 @@ Content-Type: application/json
 }
 
 ###
-POST http://192.168.109.132:3000/fabric/verifyToken
+POST http://192.168.109.132:5000/company/verifyToken
 Content-Type: application/json
 
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY2MTk0NzIxLCJleHAiOjE1NjYxOTQ5MDF9.9YrTzZ9dNxfksZ0vHUSQAshyIYKOuRVolnTvXIfHpko"
+    "token": "eyJhbGciOiJIUzI1NasdfasdiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiYWJjZGVmZ2hpamtsbW5vcCIsIkFQSV9TRUNSRVQiOiJhYmNkZWZnaGlqa2xtbm9wIiwiaWF0IjoxNTY2MTk0NzIxLCJleHAiOjE1NjYxOTQ5MDF9.9YrTzZ9dNxfksZ0vHUSQAshyIYKOuRVolnTvXIfHpko"
+}
+
+###
+POST http://192.168.109.132:3000/company/getPersonalInfoByIdentifier
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBUElfS0VZIjoiMTVlMmIwZDNjMzM4OTFlYmIwZjFlZjYwOWVjNDE5NDIwYzIwZTMyMGNlOTRjNjVmYmM4YzMzMTI0NDhlYjIyNSIsIkFQSV9TRUNSRVQiOiJVMkZzZEdWa1gxOHlwWk8xb2ZqZUZiSlFYTmZzR2FzMDhrZU5xbDlsZlRVNVp1Z1VRcmYrcjM2cHBwOE8wT2wwVThrWWQxeU1uQ3RISFZjaS8vRGs1bVkzcklqVk95d1NoQU82OU8xY3crbXFCM1F5cVpna3d3dU84cW1MeVY0N3pRQ3cwdkJjbUhCL1RnWXQyVFpyYVZJTDZUWTREQ1ZLZ05qMGVHQVFhc0E9IiwiaWF0IjoxNTY3NDg2MzAxLCJleHAiOjE1Njc0ODY0ODF9.QDrobgfdLvs8FzyC5UdJ-D3Upd1u5LWnHZca74YHBkc
+
+{
+    "identifier": "identifier1"
 }
