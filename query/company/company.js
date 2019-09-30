@@ -111,19 +111,19 @@ const _getCompanyByCompanyNo = async companyNo => {
 const _updateCompany = async(companyNo, params) => {
     var sql = `
         UPDATE COMPANY
-           SET COMPANY_NAME                 =?,
-               COMPANY_REGISTRATION_NUMBER  =?,
-               COMPANY_REPRESENTATIVE_NAME  =?,
-               COMPANY_CONTACT_NUMBER       =?,
-               COMPANY_ID                   =?,
-               COMPANY_POSTCODE             =?,
-               COMPANY_ADDRESS              =?,
-               COMPANY_ADDRESS_DETAIL       =?,
-               COMPANY_REQ_STATUS           =?,
+           SET COMPANY_NAME                 ="${params.companyName}",
+               COMPANY_REGISTRATION_NUMBER  ="${params.companyRegistrationNumber}",
+               COMPANY_REPRESENTATIVE_NAME  ="${params.companyRepresentativeName}",
+               COMPANY_CONTACT_NUMBER       ="${params.companyContactNumber}",
+               COMPANY_ID                   ="${params.companyId}",
+               COMPANY_POSTCODE             ="${params.companyPostcode}",
+               COMPANY_ADDRESS              ="${params.companyAddress}",
+               COMPANY_ADDRESS_DETAIL       ="${params.companyAddressDetail}",
                CHG_DATE                     =NOW()
          WHERE COMPANY_NO = "${companyNo}"
     `;
-    return await _query(sql, params);
+    console.log(sql);
+    return await _query(sql);
 }
 
 const _checkPassword = async(params) => {

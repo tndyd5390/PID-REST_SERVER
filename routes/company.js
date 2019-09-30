@@ -17,8 +17,7 @@ _verifyToken = (token) => {
             return false;
         }
     }catch(err) {
-        console.log(err);
-        return true;
+        return false;
     }
 }
 
@@ -56,6 +55,7 @@ router.post("/verifyToken", async(req, res) => {
 router.post("/getPersonalInfoByIdentifier", async(req, res) => {
     const {body: {identifier}} = req;
     var token = req.get("authorization");
+    console.log(token);
     if(!_verifyToken(token)){
         res.send("Invalid token");
         return;
@@ -154,19 +154,12 @@ router.put("/:companyNo", async(req, res) => {
     var {body: {companyObj}} = req;
     var targetCompany = await companyQuery.getCompanyByCompanyNo(companyNo);
     var updateCompanyObj = Object.assign({}, targetCompany[0], companyObj);
-    var updateCompanyArr = Object.values(updateCompanyObj);
-    if(updateCompanyArr.length != Object.values(targetCompany[0]).length) {
-        res.send(false);
-        return;
-    }
-    updateCompanyArr = updateCompanyArr.slice(1, updateCompanyArr.length);
-    var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyArr);
+    var updateResult = await companyQuery.updateCompany(companyNo, updateCompanyObj);
     if(updateResult.changedRows != 0) {
         res.send(true);
     } else {
         res.send(false);
     }
-    res.send(true);
 })
 
 router.post("/checkPassword", async(req,res) => {
