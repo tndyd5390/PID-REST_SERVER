@@ -4,14 +4,20 @@ var path = require('path');
 var util = require('util');
 var os = require('os');
 const utils = require("../utils")
+const IP = require("../../const");
 const {
 	nvl,
 	strIsEmpty
 } = utils
 //==========================================
-const CHAINCODE_ID = "test1";
-const CHANNEL_NAME = "mychannel";
-const PEER_IP = "grpc://localhost:7051";
+const {
+	CHAINCODE_ID,
+	CHANNEL_NAME,
+	PEER_IP
+} = IP;
+// const CHAINCODE_ID = "test1";
+// const CHANNEL_NAME = "mychannel";
+// const PEER_IP = "grpc://localhost:7051";
 //==========================================
 
 var fabric_client = new Fabric_Client();
