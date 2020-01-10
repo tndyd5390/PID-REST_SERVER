@@ -4,7 +4,7 @@ const path = require('path');
 const util = require('util');
 const os = require('os');
 const utils = require("../utils");
-const static = require("../../const");
+const STATIC = require("../../const");
 const {
 	nvl,
 	strIsEmpty
@@ -16,7 +16,7 @@ const {
 	CHANNEL_NAME,
 	PEER_IP,
 	ORDERER_IP
-} = static;
+} = STATIC;
 // const CHAINCODE_ID = "test1";
 // const CHANNEL_NAME = "mychannel";
 // const PEER_IP = "grpc://localhost:7051";
@@ -113,7 +113,7 @@ const main = async() => {
 			address: "home",
 			email: "tndyd5390@naver.com",
 			password: "tndyd5390@",
-			logs: "this is fuck"
+			logs: "this is logs"
 		}
     );
     console.log(result);
